@@ -6,10 +6,9 @@ import {
 } from "datocms-plugin-sdk";
 import { render } from "./utils/render";
 import "datocms-react-ui/styles.css";
-import FeatherIconsPicker from "./components/FeatherIconsPicker";
 import ConfigScreen from "./entrypoints/ConfigScreen";
+import FieldExtension from "./entrypoints/FieldExtension";
 // https://react-icons.github.io/react-icons/icons/fi/
-// https://github.com/tomphill/datocms-plugin-fontawesome/blob/main/src/components/FontAwesomePicker.tsx
 
 const id = "feathericons"
 connect({
@@ -22,14 +21,14 @@ connect({
         id,
         name: "Feather Icons",
         type: "editor",
-        fieldTypes: ["json"],
+        fieldTypes: ["string"],
       },
     ];
   },
   renderFieldExtension(fieldExtensionId: string, ctx: RenderFieldExtensionCtx) {
     switch (fieldExtensionId) {
       case id:
-        return render(<FeatherIconsPicker ctx={ctx} />);
+        return render(<FieldExtension ctx={ctx} />);
       default:
         return null;
     }

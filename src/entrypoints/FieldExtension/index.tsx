@@ -4,7 +4,7 @@ import get from "lodash/get";
 
 import * as ReactIcons from "react-icons/fi";
 
-import "./styles.css";
+import styles from "./styles.module.css";
 import { Canvas, TextInput } from "datocms-react-ui";
 
 type Props = {
@@ -23,7 +23,7 @@ const IconFactory = ({ name }: { name: string }) => {
   return <Comp />
 }
 
-const FeatherIconsPicker: FC<Props> = ({ ctx }) => {
+const FieldExtension: FC<Props> = ({ ctx }) => {
   const initialValue = get(ctx?.formValues, ctx?.fieldPath || "");
   const [showIcons, setShowIcons] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -63,16 +63,16 @@ const FeatherIconsPicker: FC<Props> = ({ ctx }) => {
 
   return (
     <Canvas ctx={ctx}>
-      <div className="App">
+      <div className={styles.main}>
         {!selectedIcon && (
           <>
             <div>
-              <span className="toggler" onClick={() => setShowIcons((s) => !s)}>
+              <span className={styles.toggler} onClick={() => setShowIcons((s) => !s)}>
                 {showIcons ? "Hide" : "Show"} all icons
               </span>
             </div>
             {showIcons && (
-              <div className="search-input-wrapper">
+              <div className={styles.search}>
                 <TextInput
                   value={searchTerm}
                   onChange={(newValue) => {
@@ -88,7 +88,7 @@ const FeatherIconsPicker: FC<Props> = ({ ctx }) => {
         )}
         {!!selectedIcon && (
           <div
-            className="selected-icon"
+            className={styles.selectedIcon}
             key={`selected-icon-${selectedIcon}`}
           >
             <div>
@@ -100,18 +100,18 @@ const FeatherIconsPicker: FC<Props> = ({ ctx }) => {
                 ctx?.setFieldValue(ctx.fieldPath, null);
                 setSelectedIcon(null);
               }}
-              className="remove-text"
+              className={styles.removeText}
             >
               Remove
             </div>
           </div>
         )}
-        <div className="grid">
+        <div className={styles.grid}>
           {!selectedIcon && showIcons && workingIcons.map((icon) => {
             return (
               <div
                 onClick={() => handleIconClick(icon)}
-                className="icon"
+                className={styles.icon}
                 key={`icon-${icon.name}`}
               >
                 <div>
@@ -124,16 +124,16 @@ const FeatherIconsPicker: FC<Props> = ({ ctx }) => {
         </div>
         {workingIcons.length === 0 && <h3>No icons found.</h3>}
         {!selectedIcon && showIcons && workingIcons.length > 0 && (
-          <div className="pagination">
+          <div className={styles.pagination}>
             <div>
               <div>
                 Page {currentPage} of {totalPages}
               </div>
-              <div className="pages">
+              <div className={styles.pages}>
                 <button
                   onClick={() => setCurrentPage(1)}
                   disabled={currentPage === 1}
-                  className="btn"
+                  className={styles.btn}
                   style={{
                     background: ctx?.theme.primaryColor || "black",
                   }}
@@ -143,7 +143,7 @@ const FeatherIconsPicker: FC<Props> = ({ ctx }) => {
                 <button
                   onClick={() => setCurrentPage((s) => s - 1)}
                   disabled={currentPage === 1}
-                  className="btn"
+                  className={styles.btn}
                   style={{
                     background: ctx?.theme.primaryColor || "black",
                   }}
@@ -153,7 +153,7 @@ const FeatherIconsPicker: FC<Props> = ({ ctx }) => {
                 <button
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage((s) => s + 1)}
-                  className="btn"
+                  className={styles.btn}
                   style={{
                     background: ctx?.theme.primaryColor || "black",
                   }}
@@ -163,7 +163,7 @@ const FeatherIconsPicker: FC<Props> = ({ ctx }) => {
                 <button
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage(totalPages)}
-                  className="btn"
+                  className={styles.btn}
                   style={{
                     background: ctx?.theme.primaryColor || "black",
                   }}
@@ -179,4 +179,4 @@ const FeatherIconsPicker: FC<Props> = ({ ctx }) => {
   );
 };
 
-export default FeatherIconsPicker;
+export default FieldExtension;
