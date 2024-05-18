@@ -71,7 +71,7 @@ const FeatherIconsPicker: FC<Props> = ({ ctx }) => {
                 {showIcons ? "Hide" : "Show"} all icons
               </span>
             </div>
-            {!!showIcons && (
+            {showIcons && (
               <div className="search-input-wrapper">
                 <TextInput
                   value={searchTerm}
@@ -107,25 +107,23 @@ const FeatherIconsPicker: FC<Props> = ({ ctx }) => {
           </div>
         )}
         <div className="grid">
-          {!selectedIcon &&
-            !!showIcons &&
-            workingIcons.map((icon) => {
-              return (
-                <div
-                  onClick={() => handleIconClick(icon)}
-                  className="icon"
-                  key={`icon-${icon.name}`}
-                >
-                  <div>
-                    <IconFactory name={icon.name} />
-                  </div>
-                  <span>{icon.name}</span>
+          {!selectedIcon && showIcons && workingIcons.map((icon) => {
+            return (
+              <div
+                onClick={() => handleIconClick(icon)}
+                className="icon"
+                key={`icon-${icon.name}`}
+              >
+                <div>
+                  <IconFactory name={icon.name} />
                 </div>
-              );
-            })}
+                <span>{icon.name}</span>
+              </div>
+            );
+          })}
         </div>
-        {!workingIcons.length && <h3>No icons found.</h3>}
-        {!selectedIcon && !!showIcons && !!workingIcons.length && (
+        {workingIcons.length === 0 && <h3>No icons found.</h3>}
+        {!selectedIcon && showIcons && workingIcons.length > 0 && (
           <div className="pagination">
             <div>
               <div>
