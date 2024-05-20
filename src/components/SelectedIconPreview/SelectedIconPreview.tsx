@@ -2,7 +2,6 @@ import { RenderFieldExtensionCtx } from "datocms-plugin-sdk";
 import { FC, MouseEventHandler } from "react";
 import { IconFactory } from "../icons";
 import { Button } from "datocms-react-ui";
-import { FaPen, FaTrash } from "react-icons/fa";
 
 import styles from "./styles.module.css";
 
@@ -30,7 +29,6 @@ const SelectedIconPreview: FC<Props> = ({
         type="button"
         onClick={handleOpenModal}
         buttonSize="s"
-        leftIcon={<FaPen className={styles.buttonIcon} />}
       >
         Change
       </Button>
@@ -41,7 +39,6 @@ const SelectedIconPreview: FC<Props> = ({
           setSelectedIcon(null);
         }}
         buttonSize="s"
-        leftIcon={<FaTrash className={styles.buttonIcon} />}
       >
         Remove
       </Button>
