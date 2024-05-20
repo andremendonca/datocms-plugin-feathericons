@@ -31,7 +31,7 @@ const FieldExtension: FC<Props> = ({ ctx }) => {
     .map((name) => ({ name }))
     .filter((icon: Icon) => {
       if (searchTerm) {
-        return icon.name.indexOf(searchTerm.toLowerCase()) !== -1;
+        return icon.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1;
       } else {
         return icon;
       }
