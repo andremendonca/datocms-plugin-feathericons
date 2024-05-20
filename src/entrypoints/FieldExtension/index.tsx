@@ -3,7 +3,7 @@ import { FC, useState } from "react";
 import get from "lodash/get";
 
 import styles from "./styles.module.css";
-import { Canvas, TextInput } from "datocms-react-ui";
+import { Button, Canvas, TextInput } from "datocms-react-ui";
 import Pagination from "../../components/Pagination";
 import icons, { Icon, IconFactory } from "../../components/icons";
 import SelectedIconPreview from "../../components/SelectedIconPreview/SelectedIconPreview";
@@ -13,18 +13,22 @@ type Props = {
 };
 
 const FieldExtension: FC<Props> = ({ ctx }) => {
-  const initialValue = get(ctx?.formValues, ctx?.fieldPath || "");
+  const rawValue = get(ctx?.formValues, ctx?.fieldPath || "");
   const [showIcons, setShowIcons] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedIcon, setSelectedIcon] = useState(
-    typeof initialValue === "string" ? initialValue : null
+    typeof rawValue === "string" ? rawValue : null
   );
 
-  const handleIconClick = (icon: Icon) => {
+  const handleUpdate = (icon: Icon) => {
     const name = icon?.name;
     setSelectedIcon(name);
     ctx?.setFieldValue(ctx.fieldPath, name || "");
+  };
+
+  const handleIconClick = (icon: Icon) => {
+    handleUpdate(icon);
   };
 
   const allIcons = Object.keys(icons)
@@ -50,70 +54,39 @@ const FieldExtension: FC<Props> = ({ ctx }) => {
     (currentPage - 1) * pageSize + pageSize
   );
 
+  const handleOpenModal = async () => {
+    const exitValue = (await ctx.openModal({
+      id: "icon-picker",
+      parameters: {},
+      width: 1200,
+      title: "Select an icon",
+    })) as Icon | undefined;
+
+    if (!exitValue) return;
+    handleUpdate(exitValue);
+  };
+
   if (selectedIcon) {
     return (
       <Canvas ctx={ctx}>
-              <div className={styles.main}>
-        <SelectedIconPreview
-          ctx={ctx}
-          selectedIcon={selectedIcon}
-          setSelectedIcon={setSelectedIcon}
-        /></div>
+        <div className={styles.main}>
+          <SelectedIconPreview
+            ctx={ctx}
+            selectedIcon={selectedIcon}
+            setSelectedIcon={setSelectedIcon}
+            handleOpenModal={handleOpenModal}
+          />
+        </div>
       </Canvas>
     );
   }
 
   return (
     <Canvas ctx={ctx}>
-      <div className={styles.main}>
-        <div>
-          <span
-            className={styles.toggler}
-            onClick={() => setShowIcons((s) => !s)}
-          >
-            {showIcons ? "Hide" : "Show"} all icons
-          </span>
-        </div>
-        {showIcons && (
-          <div className={styles.search}>
-            <TextInput
-              value={searchTerm}
-              onChange={(newValue) => {
-                setCurrentPage(1);
-                setSearchTerm(newValue);
-              }}
-              placeholder="Search..."
-              type="search"
-            />
-          </div>
-        )}
-        <div className={styles.grid}>
-          {showIcons &&
-            workingIcons.map((icon) => {
-              return (
-                <div
-                  onClick={() => handleIconClick(icon)}
-                  className={styles.icon}
-                  key={`icon-${icon.name}`}
-                >
-                  <div>
-                    <IconFactory name={icon.name} />
-                  </div>
-                  <span>{icon.name}</span>
-                </div>
-              );
-            })}
-        </div>
-        {workingIcons.length === 0 && <h3>No icons found.</h3>}
-        {showIcons && workingIcons.length > 0 && (
-          <Pagination
-            ctx={ctx}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            allIcons={allIcons}
-            pageSize={pageSize}
-          />
-        )}
+      <div className={`${styles.main} ${styles.empty}`}>
+        <Button type="button" onClick={handleOpenModal}>
+          Select Icon
+        </Button>
       </div>
     </Canvas>
   );

@@ -1,34 +1,50 @@
 import { RenderFieldExtensionCtx } from "datocms-plugin-sdk";
-import { FC } from "react";
+import { FC, MouseEventHandler } from "react";
+import { IconFactory } from "../icons";
+import { Button } from "datocms-react-ui";
+import { FaPen, FaTrash } from "react-icons/fa";
 
 import styles from "./styles.module.css";
-import { IconFactory } from "../icons";
 
 type Props = {
   ctx: RenderFieldExtensionCtx;
   selectedIcon: string;
   setSelectedIcon: Function;
+  handleOpenModal: MouseEventHandler;
 };
 
-const SelectedIconPreview: FC<Props> = ({ ctx, selectedIcon, setSelectedIcon }) => {
+const SelectedIconPreview: FC<Props> = ({
+  ctx,
+  selectedIcon,
+  setSelectedIcon,
+  handleOpenModal,
+}) => {
   return (
-    <div
-      className={styles.selectedIcon}
-      key={`selected-icon-${selectedIcon}`}
-    >
+    <div className={styles.main} key={`selected-icon-${selectedIcon}`}>
       <div>
-        <IconFactory name={selectedIcon} />
+        <div className={styles.selectedIcon}><IconFactory name={selectedIcon} /></div>
+        <span>{selectedIcon}</span>
       </div>
-      <span>{selectedIcon}</span>
-      <div
+
+      <Button
+        type="button"
+        onClick={handleOpenModal}
+        buttonSize="s"
+        leftIcon={<FaPen className={styles.buttonIcon} />}
+      >
+        Change
+      </Button>
+
+      <Button
         onClick={() => {
           ctx?.setFieldValue(ctx.fieldPath, null);
           setSelectedIcon(null);
         }}
-        className={styles.remove}
+        buttonSize="s"
+        leftIcon={<FaTrash className={styles.buttonIcon} />}
       >
         Remove
-      </div>
+      </Button>
     </div>
   );
 };

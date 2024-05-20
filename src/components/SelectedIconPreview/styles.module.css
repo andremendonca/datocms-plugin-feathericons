@@ -1,27 +1,33 @@
-.selectedIcon {
-  padding: 4px 0;
-  cursor: pointer;
+
+.main {
   display: flex;
-  color: #666;
+  color: black;
+  gap: var(--spacing-m);
+  align-items: center;
+}
+.main > div {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-m);
 }
 .selectedIcon {
-  color: black;
-  cursor: initial;
+  background: #fafafa;
+  border-radius: 4px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.remove {
-  color: red;
-  cursor: pointer;
-  margin: auto 0 auto 8px;
+.selectedIcon svg {
+  width: 30px;
+  height: 30px;
+}
+.buttonIcon {
+  width: 13px;
 }
 .selectedIcon svg {
   font-size: 20px;
   margin: auto 0;
-}
-.selectedIcon > div:first-child {
-  width: 40px;
-  min-width: 40px;
-  display: flex;
-  justify-content: center;
 }
 .selectedIcon > span {
   padding-left: 4px;

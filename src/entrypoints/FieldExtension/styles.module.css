@@ -1,55 +1,17 @@
 .main {
-  padding: var(--spacing-m) var(--spacing-xl);
   border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: var(--spacing-l);
 }
+
+.empty {
+  text-align: center;
+}
+
 .toggler {
   color: #666;
   cursor: pointer;
 }
 .toggler:hover {
   color: black;
-}
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-}
-.search {
-  max-width: 300px;
-  padding-bottom: 10px;
-  margin-top: 10px;
-}
-.icon {
-  padding: 4px 0;
-  cursor: pointer;
-  display: flex;
-  color: #666;
-}
-.icon:hover {
-  color: black;
-}
-.icon svg {
-  font-size: 20px;
-  margin: auto 0;
-}
-.icon > div {
-  width: 40px;
-  min-width: 40px;
-  display: flex;
-  justify-content: center;
-}
-.icon > span {
-  padding-left: 4px;
-  margin: auto 0;
-}
-
-@media (max-width: 900px) {
-  .grid {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-}
-
-@media (max-width: 600px) {
-  .grid {
-    grid-template-columns: 1fr 1fr;
-  }
 }

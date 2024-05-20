@@ -8,6 +8,7 @@ import { render } from "./utils/render";
 import "datocms-react-ui/styles.css";
 import ConfigScreen from "./entrypoints/ConfigScreen";
 import FieldExtension from "./entrypoints/FieldExtension";
+import Modal from "./entrypoints/Modal";
 // https://react-icons.github.io/react-icons/icons/fi/
 
 const id = "feathericons"
@@ -32,5 +33,8 @@ connect({
       default:
         return null;
     }
-  }
+  },
+  renderModal(id, ctx) {
+    render(<Modal ctx={ctx} />);
+  },
 });
