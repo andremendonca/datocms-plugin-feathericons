@@ -2,26 +2,15 @@ import { RenderFieldExtensionCtx } from "datocms-plugin-sdk";
 import { FC, useState } from "react";
 import get from "lodash/get";
 
-import * as ReactIcons from "react-icons/fi";
-
 import styles from "./styles.module.css";
 import { Canvas, TextInput } from "datocms-react-ui";
+import Pagination from "../../components/Pagination";
+import icons, { Icon, IconFactory } from "../../components/icons";
+import SelectedIconPreview from "../../components/SelectedIconPreview/SelectedIconPreview";
 
 type Props = {
   ctx: RenderFieldExtensionCtx;
 };
-
-type Icon = {
-  name: string
-}
-
-type Icons = typeof ReactIcons;
-const icons: Icons = ReactIcons;
-
-const IconFactory = ({ name }: { name: string }) => {
-  const Comp = icons[name as keyof Icons];
-  return <Comp />
-}
 
 const FieldExtension: FC<Props> = ({ ctx }) => {
   const initialValue = get(ctx?.formValues, ctx?.fieldPath || "");
@@ -38,7 +27,8 @@ const FieldExtension: FC<Props> = ({ ctx }) => {
     ctx?.setFieldValue(ctx.fieldPath, name || "");
   };
 
-  const allIcons = Object.values(icons)
+  const allIcons = Object.keys(icons)
+    .map((name) => ({ name }))
     .filter((icon: Icon) => {
       if (searchTerm) {
         return icon.name.indexOf(searchTerm.toLowerCase()) !== -1;
@@ -59,120 +49,70 @@ const FieldExtension: FC<Props> = ({ ctx }) => {
     (currentPage - 1) * pageSize,
     (currentPage - 1) * pageSize + pageSize
   );
-  const totalPages = Math.ceil(allIcons.length / pageSize);
+
+  if (selectedIcon) {
+    return (
+      <Canvas ctx={ctx}>
+              <div className={styles.main}>
+        <SelectedIconPreview
+          ctx={ctx}
+          selectedIcon={selectedIcon}
+          setSelectedIcon={setSelectedIcon}
+        /></div>
+      </Canvas>
+    );
+  }
 
   return (
     <Canvas ctx={ctx}>
       <div className={styles.main}>
-        {!selectedIcon && (
-          <>
-            <div>
-              <span className={styles.toggler} onClick={() => setShowIcons((s) => !s)}>
-                {showIcons ? "Hide" : "Show"} all icons
-              </span>
-            </div>
-            {showIcons && (
-              <div className={styles.search}>
-                <TextInput
-                  value={searchTerm}
-                  onChange={(newValue) => {
-                    setCurrentPage(1);
-                    setSearchTerm(newValue);
-                  }}
-                  placeholder="Search..."
-                  type="search"
-                />
-              </div>
-            )}
-          </>
-        )}
-        {!!selectedIcon && (
-          <div
-            className={styles.selectedIcon}
-            key={`selected-icon-${selectedIcon}`}
+        <div>
+          <span
+            className={styles.toggler}
+            onClick={() => setShowIcons((s) => !s)}
           >
-            <div>
-              <IconFactory name={selectedIcon} />
-            </div>
-            <span>{selectedIcon}</span>
-            <div
-              onClick={() => {
-                ctx?.setFieldValue(ctx.fieldPath, null);
-                setSelectedIcon(null);
+            {showIcons ? "Hide" : "Show"} all icons
+          </span>
+        </div>
+        {showIcons && (
+          <div className={styles.search}>
+            <TextInput
+              value={searchTerm}
+              onChange={(newValue) => {
+                setCurrentPage(1);
+                setSearchTerm(newValue);
               }}
-              className={styles.removeText}
-            >
-              Remove
-            </div>
+              placeholder="Search..."
+              type="search"
+            />
           </div>
         )}
         <div className={styles.grid}>
-          {!selectedIcon && showIcons && workingIcons.map((icon) => {
-            return (
-              <div
-                onClick={() => handleIconClick(icon)}
-                className={styles.icon}
-                key={`icon-${icon.name}`}
-              >
-                <div>
-                  <IconFactory name={icon.name} />
+          {showIcons &&
+            workingIcons.map((icon) => {
+              return (
+                <div
+                  onClick={() => handleIconClick(icon)}
+                  className={styles.icon}
+                  key={`icon-${icon.name}`}
+                >
+                  <div>
+                    <IconFactory name={icon.name} />
+                  </div>
+                  <span>{icon.name}</span>
                 </div>
-                <span>{icon.name}</span>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
         {workingIcons.length === 0 && <h3>No icons found.</h3>}
-        {!selectedIcon && showIcons && workingIcons.length > 0 && (
-          <div className={styles.pagination}>
-            <div>
-              <div>
-                Page {currentPage} of {totalPages}
-              </div>
-              <div className={styles.pages}>
-                <button
-                  onClick={() => setCurrentPage(1)}
-                  disabled={currentPage === 1}
-                  className={styles.btn}
-                  style={{
-                    background: ctx?.theme.primaryColor || "black",
-                  }}
-                >
-                  <icons.FiChevronsLeft />
-                </button>
-                <button
-                  onClick={() => setCurrentPage((s) => s - 1)}
-                  disabled={currentPage === 1}
-                  className={styles.btn}
-                  style={{
-                    background: ctx?.theme.primaryColor || "black",
-                  }}
-                >
-                  <icons.FiChevronLeft />
-                </button>
-                <button
-                  disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage((s) => s + 1)}
-                  className={styles.btn}
-                  style={{
-                    background: ctx?.theme.primaryColor || "black",
-                  }}
-                >
-                  <icons.FiChevronRight />
-                </button>
-                <button
-                  disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage(totalPages)}
-                  className={styles.btn}
-                  style={{
-                    background: ctx?.theme.primaryColor || "black",
-                  }}
-                >
-                  <icons.FiChevronsRight />
-                </button>
-              </div>
-            </div>
-          </div>
+        {showIcons && workingIcons.length > 0 && (
+          <Pagination
+            ctx={ctx}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            allIcons={allIcons}
+            pageSize={pageSize}
+          />
         )}
       </div>
     </Canvas>

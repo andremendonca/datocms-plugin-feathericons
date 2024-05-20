@@ -1,0 +1,29 @@
+.selectedIcon {
+  padding: 4px 0;
+  cursor: pointer;
+  display: flex;
+  color: #666;
+}
+.selectedIcon {
+  color: black;
+  cursor: initial;
+}
+.remove {
+  color: red;
+  cursor: pointer;
+  margin: auto 0 auto 8px;
+}
+.selectedIcon svg {
+  font-size: 20px;
+  margin: auto 0;
+}
+.selectedIcon > div:first-child {
+  width: 40px;
+  min-width: 40px;
+  display: flex;
+  justify-content: center;
+}
+.selectedIcon > span {
+  padding-left: 4px;
+  margin: auto 0;
+}

@@ -1,0 +1,27 @@
+.pagination {
+  margin: 10px auto;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.pages {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.pages > .btn {
+  margin: 0 2px;
+}
+.btn {
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  color: white;
+}
+.btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
